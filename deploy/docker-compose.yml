@@ -1,0 +1,33 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - '$PORT:80'
+
+  myapp:
+    build:
+      context: ../
+      dockerfile: build/myapp/Dockerfile
+    expose:
+      - '$MYAPP_PORT'
+    environment:
+      MYAPP_PORT: $MYAPP_PORT
+      MYAPP_GRPC_MYSVR_ADDR: mysvr:$MYSVR_PORT
+    deploy:
+      replicas: $MYAPP_REPLICAS
+
+  mysvr:
+    build:
+      context: ../
+      dockerfile: build/mysvr/Dockerfile
+    expose:
+      - '$MYSVR_PORT'
+    environment:
+      MYSVR_PORT: $MYSVR_PORT
+    deploy:
+      replicas: $MYSVR_REPLICAS

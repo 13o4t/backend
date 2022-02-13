@@ -1,0 +1,64 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: myapp
+  description: TODO
+servers:
+  - url: http://{hostname}:{port}/
+    variables:
+      hostname:
+        default: localhost
+      port:
+        default: '80'
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      operationId: health
+      responses:
+        '200':
+          description: Health
+
+  /hello:
+    get:
+      operationId: hello
+      parameters:
+        - in: query
+          name: name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: TODO
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /add:
+    get:
+      operationId: add
+      parameters:
+        - in: query
+          name: a
+          required: false
+          schema:
+            type: integer
+        - in: query
+          name: b
+          required: false
+          schema:
+            type: integer
+    responses:
+      '200':
+        description: Add result
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                result:
+                  type: integer
+                  description: The result
